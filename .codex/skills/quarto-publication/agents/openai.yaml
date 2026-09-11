@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quarto Publication"
+  short_description: "Quarto literature and scholarly publishing"
+  default_prompt: "Use $quarto-publication to prepare a Quarto scholarly manuscript, book, or publication project."

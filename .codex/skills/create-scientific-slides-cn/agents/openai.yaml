@@ -1,0 +1,4 @@
+interface:
+  display_name: "中文科研汇报幻灯片"
+  short_description: "生成简洁严谨的中文科研汇报幻灯片及数学技术图示规范"
+  default_prompt: "使用 $create-scientific-slides-cn 根据我的材料制作中文科研汇报 PPT。"
