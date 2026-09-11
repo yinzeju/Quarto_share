@@ -2,7 +2,7 @@
 
 分享用于科研写作与中文科研汇报的 Quarto 工作流：项目规则、两套 Codex 技能、参考资料及从材料整理到渲染交付的操作管线。
 
-这是一次独立快照，不包含原工作区的出版正文、论文、汇报、数据、素材、文献库、输出或 Git 历史，也不包含个人 Codex 配置和私人符号规范。
+本仓库专注于可复用的技能、项目规范和制作流程，供读者应用到自己的 Quarto 项目中。
 
 ## 内容
 
@@ -11,7 +11,7 @@
 | `AGENTS.md` | 通用项目规则 |
 | `.codex/skills/quarto-publication/` | 学术出版技能、语法示例和官方文档索引 |
 | `.codex/skills/create-scientific-slides-cn/` | 中文科研 PPT 内容、术语、视觉与验收规范 |
-| `guidelines/research-reports/AGENTS.md` | 脱敏后的科研汇报规则，可合并到自己的汇报目录 |
+| `guidelines/research-reports/AGENTS.md` | 通用科研汇报规则，可合并到自己的汇报目录 |
 | `docs/pipeline.md` | 从材料到交付的操作管线 |
 | `docs/sharing-scope.md` | 分享范围和后续更新方法 |
 
