@@ -27,6 +27,7 @@
 ## 技能边界
 
 - Quarto 出版使用 `quarto-publication`：公式保留在 `.qmd` 的 LaTeX 源码中，由 Quarto 正常渲染。
+- Quarto 科研幻灯片同时遵守 [科研汇报规范](guidelines/research-reports/AGENTS.md)：默认 16:9 浅色学术风格、蓝青强调、每页一个中心结论；所有文献引用放在对应页左下角，统一为 `作者(年份)`，多篇用分号分隔。
 - `create-scientific-slides-cn` 是专门制作 PPTX 的辅助技能，默认在可编辑文本框中保留原始 LaTeX 字符串；依赖使用者环境提供 `presentations` 技能及制作、渲染工具。本仓库不打包该外部技能。
 - PPTX 辅助技能的固定分页、字号和公式文本框规则不自动套用到 Quarto、Reveal.js 或论文。以项目规则和用户明确要求为准。
 
