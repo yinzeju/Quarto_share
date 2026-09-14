@@ -1,6 +1,6 @@
 # Research Report Project Rules
 
-This reusable adaptation preserves the source workspace's report workflow without private paths. Merge it into your own report directory's AGENTS.md. Inherit workspace rules and follow explicit user requirements.
+Merge these reusable rules into your report directory's AGENTS.md. Inherit workspace rules and follow explicit user requirements.
 
 ## Project and sources
 
@@ -27,7 +27,7 @@ This reusable adaptation preserves the source workspace's report workflow withou
 
 ## Mathematics
 
-- Follow explicit user notation and available project notation guides. Private external notation files are not included here.
+- Follow explicit user notation and available project notation guides.
 - Keep formulas as editable LaTeX in .qmd and render normally through Quarto/Pandoc.
 - Use $...$ for inline math and $$...$$ for display math.
 - Do not replace formulas with screenshots, bitmaps, outlined SVG, or manually drawn characters.
