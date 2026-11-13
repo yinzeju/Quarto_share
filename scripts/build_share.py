@@ -1,4 +1,4 @@
-"""Check and ZIP the portable report rules using an explicit file allowlist."""
+"""Check and ZIP publishing skills and runnable templates from an explicit allowlist."""
 
 from pathlib import Path
 from urllib.parse import unquote
@@ -12,13 +12,22 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ("quarto-report", "weekly-report")
+SKILLS = ("quarto-report", "weekly-report", "quarto-paper")
 ENTRIES = (
     "README.md", "AGENTS.md", ".gitignore", ".gitattributes",
     *(f".agents/skills/{name}" for name in SKILLS),
     "docs", "scripts",
+    "Paper/README.md", "Report/README.md", "Report/Weekly/README.md",
+    "Report/Weekly/Template",
+    *(f"Paper/Template/{name}" for name in (
+        "README.md", ".gitignore", "_quarto.yml", "_quarto-submission.yml",
+        "manuscript.qmd", "references.bib", "highlights.txt", "math-header.html", "math-tex.lua",
+        "notes", "scripts", "figures", "results", "_extensions", "assets",
+    )),
 )
-TEXT_SUFFIXES = {".md", ".qmd", ".yml", ".yaml", ".py", ".bib"}
+TEXT_SUFFIXES = {".md", ".qmd", ".yml", ".yaml", ".py", ".bib", ".css", ".scss", ".js", ".html", ".lua", ".tex", ".cls", ".bst", ".csl", ".csv", ".json", ".txt", ".svg"}
+BINARY_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".pdf", ".woff", ".woff2", ".ttf"}
+SKIP_DIRS = {"__pycache__", ".quarto", "_output", "tmp", "output", ".playwright-cli", "node_modules"}
 LINK = re.compile(r"\[[^\]\n]+\]\(([^)\n]+)\)")
 MACHINE_PATH = re.compile(
     r"(?<![A-Za-z0-9])[A-Za-z]:[\\/]"
@@ -42,12 +51,12 @@ def collect():
         candidates = [base] if base.is_file() else [base, *base.rglob("*")]
         for path in candidates:
             rel = path.relative_to(ROOT)
-            if "__pycache__" in rel.parts or path.suffix in {".pyc", ".pyo"}:
+            if any(part in SKIP_DIRS or part.endswith("_files") for part in rel.parts) or path.suffix in {".pyc", ".pyo"}:
                 continue
             if path.is_symlink() or not path.resolve().is_relative_to(ROOT):
                 raise ValueError(f"Linked or external content is not allowed: {rel.as_posix()}")
             if path.is_file():
-                if path.name not in {".gitignore", ".gitattributes"} and path.suffix not in TEXT_SUFFIXES:
+                if path.name not in {".gitignore", ".gitattributes", "LICENSE"} and path.suffix not in TEXT_SUFFIXES | BINARY_SUFFIXES:
                     raise ValueError(f"Unexpected file type; review before sharing: {rel.as_posix()}")
                 files.append(path)
     return sorted(set(files), key=lambda path: path.relative_to(ROOT).as_posix())
@@ -58,6 +67,8 @@ def check(files):
     allowed = set(files)
     for path in files:
         rel = path.relative_to(ROOT).as_posix()
+        if path.suffix in BINARY_SUFFIXES:
+            continue
         content = path.read_text(encoding="utf-8-sig")
         # LaTeX map type annotations can resemble drive paths.
         path_text = content
@@ -83,6 +94,13 @@ def check(files):
                 continue
             target = unquote(target.split("#", 1)[0])
             resolved = (path.parent / target).resolve()
+            # Quarto selects PNG/PDF for extensionless image paths by output format.
+            if resolved.is_relative_to(ROOT) and not resolved.exists() and not resolved.suffix:
+                alternatives = [resolved.with_suffix(suffix) for suffix in (".png", ".pdf", ".svg", ".jpg") if resolved.with_suffix(suffix).is_file()]
+                if alternatives:
+                    if any(candidate not in allowed for candidate in alternatives):
+                        errors.append(f"{rel}: image variant will not be packaged: {target}")
+                    continue
             if not resolved.is_relative_to(ROOT) or not resolved.exists():
                 errors.append(f"{rel}: broken or external local link: {target}")
             elif resolved.is_file() and resolved not in allowed:
@@ -105,7 +123,7 @@ def check(files):
 
 def build(files):
     manifest = {
-        "scope": "Ready-to-use research-report and weekly-report rules, skills, and the author's Core notation.",
+        "scope": "Paper/report/weekly skills, Core notation, and runnable paper and scientific presentation templates.",
         "files": [
             {"path": path.relative_to(ROOT).as_posix(),
              "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),

@@ -1,0 +1,22 @@
+<script>
+(() => {
+  const initialize = () => {
+    document.querySelectorAll('.slides section.long-derivation').forEach(slide => {
+      slide.tabIndex = 0;
+      slide.setAttribute('aria-label', slide.querySelector('h2').textContent + '，整页可上下滚动');
+      slide.addEventListener('wheel', event => event.stopPropagation(), {passive:true});
+      slide.addEventListener('keydown', event => {
+        const distances = {ArrowDown:70, ArrowUp:-70, PageDown:slide.clientHeight*.8, PageUp:-slide.clientHeight*.8};
+        if (event.altKey || event.ctrlKey || event.metaKey || !(event.key in distances)) return;
+        event.preventDefault(); event.stopPropagation();
+        slide.scrollBy({top:distances[event.key], behavior:'auto'});
+      });
+    });
+    if (window.Reveal) Reveal.on('slidechanged', event => {
+      if (event.currentSlide.classList.contains('long-derivation')) event.currentSlide.focus({preventScroll:true});
+    });
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initialize);
+  else initialize();
+})();
+</script>

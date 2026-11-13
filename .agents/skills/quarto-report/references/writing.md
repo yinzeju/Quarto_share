@@ -24,4 +24,4 @@ Trace figures and data to original sources or actually generated outputs. Label 
 
 Experimental reporting should lead with quantitative tables and experiment figures, supported by concise protocol and interpretation. Keep notes and internal experiment reports in the source inventory, not the literature bibliography.
 
-For prose reports, preserve the target document's heading and academic layout. For slides, use the 16:9 system and bottom-left, one-record-per-line literature references with authors, year, journal/venue, and title under `slides.md`. Formal manuscript authoring and journal submission are outside this report package; do not assume a separate manuscript skill is installed.
+For prose reports, preserve the target document's heading and academic layout. For slides, use the 16:9 system and bottom-left, one-record-per-line literature references with authors, year, journal/venue, and title under `slides.md`. Formal manuscript authoring belongs to quarto-paper. Keep report explanation and formal manuscript authoring as separate task purposes.

@@ -1,0 +1,93 @@
+{
+  "label": "Synthetic teaching example; not a real experiment",
+  "dimensionless": true,
+  "noise": "none",
+  "dt": 0.04,
+  "training_pairs": 150,
+  "forecast_steps": 100,
+  "forecast_initial_index": 150,
+  "initial_state": [
+    0.9,
+    -0.4,
+    0.0,
+    0.3
+  ],
+  "continuous_generator": [
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    [
+      -2.0,
+      1.0,
+      -0.08,
+      -0.0
+    ],
+    [
+      1.0,
+      -2.0,
+      -0.0,
+      -0.08
+    ]
+  ],
+  "truth_operator": [
+    [
+      0.9984022378738905,
+      0.0007987213017744058,
+      0.039914773238735435,
+      1.064620891726468e-05
+    ],
+    [
+      0.0007987213017744056,
+      0.9984022378738905,
+      1.0646208917264677e-05,
+      0.039914773238735435
+    ],
+    [
+      -0.07981890026855361,
+      0.03989348082090091,
+      0.9952090560147917,
+      0.0007978696050610244
+    ],
+    [
+      0.039893480820900905,
+      -0.07981890026855362,
+      0.0007978696050610244,
+      0.9952090560147917
+    ]
+  ],
+  "singular_values": [
+    12.363400496072588,
+    7.276477363359108,
+    3.248019697883786,
+    2.603723313983463
+  ],
+  "metrics": [
+    {
+      "rank": 2,
+      "training_relative_frobenius": 0.27787588276610825,
+      "forecast_relative_frobenius": 0.40170797736044744,
+      "operator_relative_error": 0.7062281470052868
+    },
+    {
+      "rank": 4,
+      "training_relative_frobenius": 6.274946067583153e-16,
+      "forecast_relative_frobenius": 4.1399669907952354e-14,
+      "operator_relative_error": 1.1671876029594756e-15
+    }
+  ],
+  "checks": {
+    "full_state_rank": 4,
+    "full_rank_operator_error": 1.1671876029594756e-15,
+    "mode_eigenrelation_relative_residual": 6.457336398934003e-16,
+    "modal_vs_recurrence_relative_error": 2.5466424304588196e-14
+  }
+}

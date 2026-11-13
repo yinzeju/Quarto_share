@@ -1,0 +1,14 @@
+/.quarto/
+**/*.quarto_ipynb
+
+# Generated compilation intermediates and visual inspection pages
+/tmp/
+/*.aux
+/*.bbl
+/*.blg
+/*.log
+/*.spl
+/*.fls
+/elsarticle.cls
+/elsarticle-num.bst
+/manuscript.tex

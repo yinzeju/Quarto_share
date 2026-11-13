@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<script src="assets/katex/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('span.math').forEach(function (element) {
+    var tex = element.textContent.trim();
+    if ((tex.startsWith('\\(') && tex.endsWith('\\)')) ||
+        (tex.startsWith('\\[') && tex.endsWith('\\]'))) tex = tex.slice(2, -2);
+    katex.render(tex, element, {
+      displayMode: element.classList.contains('display'),
+      throwOnError: false, strict: false, output: 'htmlAndMathml'
+    });
+  });
+  window.mathReady = true;
+  if (window.Reveal && Reveal.isReady()) Reveal.layout();
+});
+</script>

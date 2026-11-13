@@ -1,0 +1,154 @@
+{
+  "logicalSlides": 13,
+  "math": {
+    "total": 43,
+    "rendered": 43
+  },
+  "pages": [
+    {
+      "index": 0,
+      "id": "physical-state",
+      "title": "完整状态把二阶振子写成一阶传播",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 1,
+      "id": "snapshot-pairs",
+      "title": "成对快照把轨迹变成矩阵回归",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 2,
+      "id": "least-squares",
+      "title": "最小二乘确定数据支撑的线性传播",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 3,
+      "id": "svd-construction",
+      "title": "截断 SVD 把伪逆变成小矩阵计算",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 4,
+      "id": "spectral-lift",
+      "title": "低维谱问题给出全状态动态模态",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 5,
+      "id": "modal-derivation",
+      "title": "特征关系推出逐步预测式",
+      "scroll": true,
+      "height": 720,
+      "scrollHeight": 1217,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 6,
+      "id": "implementation",
+      "title": "预测阶段只使用当前初态与拟合模型",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 7,
+      "id": "assumptions",
+      "title": "低残差仍需观测、秩与闭合条件支撑",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 8,
+      "id": "synthetic-results",
+      "title": "完整秩在教学算例中恢复离散传播",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 9,
+      "id": "gif-and-image",
+      "title": "运动动画与相平面描述同一条轨迹",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 10,
+      "id": "paired-images",
+      "title": "输入方向与离散谱可以分别核对",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 11,
+      "id": "three-images",
+      "title": "分量预测与相平面保留不同观察角度",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    },
+    {
+      "index": 12,
+      "id": "next-steps",
+      "title": "后续检验分别针对三个适用边界",
+      "scroll": false,
+      "height": 720,
+      "scrollHeight": 720,
+      "contentPastFooter": false,
+      "wideMath": 0,
+      "mathErrors": 0
+    }
+  ],
+  "gifChanged": true,
+  "pageErrors": []
+}

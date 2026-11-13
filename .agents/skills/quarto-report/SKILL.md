@@ -1,6 +1,6 @@
 ---
 name: quarto-report
-description: Create or revise research reports and scientific presentations under Report, including shared production rules used by weekly-report. Develop a detailed mathematical report brief before producing Quarto slides or editable PPTX. Use for reports and talks; formal manuscript publishing is outside this package.
+description: Create or revise research reports and scientific presentations under Report, including shared production rules used by weekly-report. Develop a detailed mathematical report brief before producing Quarto slides or editable PPTX. Formal manuscript publishing belongs to quarto-paper.
 ---
 
 # Research Reports
@@ -8,6 +8,8 @@ description: Create or revise research reports and scientific presentations unde
 Turn research materials into a faithful, readable report or presentation. Use the central workspace `AGENTS.md` for shared scientific rules and Git boundaries; work in the concrete publication under `Report/`.
 
 ## Establish the deliverable
+
+Read the ready-to-run [weekly template](../../../Report/Weekly/Template/README.md) when starting a new presentation or when the user asks for a style example. Its [detailed brief](../../../Report/Weekly/Template/汇报说明.qmd) and [slides](../../../Report/Weekly/Template/slides.qmd) demonstrate a connected calculation chain, complete intermediate derivations, whole-slide scrolling and GIF/static-image layouts. Reuse the structure and style; do not carry its synthetic example claims or values into a real report.
 
 Inspect the supplied notes, literature, experiment reports, existing source, `_quarto.yml`, styles, bibliography, assets, scripts, and final outputs. Determine whether the request concerns a prose report, Quarto slide deck, or PowerPoint file, and preserve an established format unless the user asks to change it. Reports default to Chinese.
 

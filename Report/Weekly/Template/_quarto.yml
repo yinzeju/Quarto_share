@@ -1,0 +1,17 @@
+project:
+  type: default
+  output-dir: _output
+  render:
+    - slides.qmd
+    - 汇报说明.qmd
+  resources:
+    - data/**
+    - sources/**
+
+lang: zh
+bibliography: references.bib
+filters:
+  - quarto
+  - math-tex.lua
+execute:
+  enabled: false

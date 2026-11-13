@@ -1,2 +1,13 @@
 * text=auto eol=lf
 *.zip binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+# Keep vendored publisher/math sources in their supplied whitespace style.
+Paper/Template/_extensions/** -whitespace
+**/assets/katex/** -whitespace

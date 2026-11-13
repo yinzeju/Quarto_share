@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文出版"
+  short_description: "Develop manuscripts, adapt journals, and export LaTeX"
+  default_prompt: "Use $quarto-paper to develop or revise my manuscript, adapt its journal format, and validate the requested publication outputs."

@@ -1,0 +1,316 @@
+---
+title: "周报模板说明：从成对快照到精确 DMD 预测"
+subtitle: "完整计算链、证据对应与图片排版"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    html-math-method: plain
+    include-in-header: math-header.html
+    embed-resources: true
+    css: styles/guide.css
+---
+
+# 汇报主线与使用范围
+
+本模板用一份可运行的示例说明怎样写清方法：**物理状态 → 快照配对 → 最小二乘 → SVD → 小矩阵谱分解 → 动态模态 → 未来预测 → 条件与数值检验**。每个新对象都说明构造与下一步用途；slides 保留听众必须跟随的计算步骤，说明保留完整理由。材料组织和浅色 16:9 版式参考作者的 20261029 周报；本模板重新编写方法内容，不复制该次汇报的研究结果。
+
+方法文献为 @tu2014dmd，核对了正式期刊信息与公开预印本中的算法 2、线性一致性定义和谱关系。文献中的一般结果与本说明的代数展开应区分。数据由 scripts/generate-demo.py 实际生成，是**无量纲、无噪声、完整状态的双自由度线性振子教学算例**；不属于作者的真实实验，也不支持新算法或普适性能声明。
+
+采用技能中附带的 Core 符号约定，内容版本为 Git blob 51272b6d2f47b3fa677ae0c79824d357d4294a2b。矩阵和向量分别用粗体大写与小写；普通转置、共轭转置、伪逆分别为 $\top,*,\dagger$。本模板中 $m$ 是时间快照索引，$j$ 是模态索引；$M=150$ 是训练数据对数，$r$ 是保留秩。所有状态、时间和误差已无量纲化。
+
+| 页 | 内容与计算结果 | 视觉组织 |
+|---:|---|---|
+| 1 | 二阶模型转为四维一阶状态；明确已知、未知 | 左侧原理图，右侧模型 |
+| 2 | 相邻状态配对，得到两个 $4\times M$ 矩阵 | 大矩阵与维度定义 |
+| 3 | 由逐列误差得到最小二乘和最小范数解 | 两列公式 |
+| 4 | 截断 SVD，逐步构造传播矩阵 | 三个有顺序的公式阶段 |
+| 5 | 小矩阵特征向量提升为全状态模态 | 左侧构造，右侧维度 |
+| 6 | 证明特征关系，得到模态时间展开 | 整页滚动的完整推导 |
+| 7 | 给出与公式逐步对应的实现及预测输入 | 可读的算法步骤 |
+| 8 | 解释秩、线性一致性、观测闭合和噪声边界 | 条件与失败原因表 |
+| 9 | 实际生成的残差与预测误差；比较 $r=2,4$ | 上图下表 |
+| 10 | 同一条轨迹的 GIF 与相平面 | GIF 左、静态图右 |
+| 11 | 奇异值与离散谱检查 | 两幅静态图并排 |
+| 12 | 两个位移分量与相平面联合展示 | 上方双图、下方横图 |
+| 13 | 噪声、部分观测、新初态三类后续检验 | 三条可执行的研究计划 |
+
+## 材料与证据
+
+- 方法与谱关系：@tu2014dmd，DOI 10.3934/jcd.2014.1.391；公开预印本为 [arXiv:1312.0041](https://arxiv.org/abs/1312.0041)。没有在分享包内分发论文全文。
+- 版式来源：作者的 20261029 周报，仅复用其公式优先、连续推导、整页滚动、固定引用区和图表组织习惯。
+- 生成程序：scripts/generate-demo.py；给出系统、初值、时间步、训练/预测划分、DMD 和断言。
+- 状态数据：[trajectory.csv](data/trajectory.csv)；统计量、系统矩阵及检查值：[results.json](data/results.json)；投影表格：[metrics-table.qmd](data/metrics-table.qmd)。
+- 图片与 GIF 的生成来源和 SHA-256：[source-manifest.json](sources/source-manifest.json)。
+
+在实际周报中替换主题、材料和结果时，应保留这条“定义—计算—结果—用途”的解释链。不要把示例数值改写成自己的真实实验结论；不要只替换标题而保留不匹配的公式和图表。
+
+# 第 1 页：完整状态与已知量
+
+**本页任务：**先定义能够决定未来演化的状态，再引出需要从数据估计的离散传播矩阵。
+
+教学系统由两个单位质量和三根单位刚度弹簧组成，阻尼为 $0.08\mathbf I_2$。取位移尺度 $L_0$、时间尺度 $T_0=\sqrt{m_0/k_0}$，令 $\tau=t/T_0$、$\mathbf q=\mathbf q_{\rm physical}/L_0$。本页以 $\tau$ 为时间变量，速度定义为 $\mathbf v=\mathrm d\mathbf q/\mathrm d\tau$，因此四个状态分量均无量纲。物理方程转为
+
+$$
+\mathbf q''+0.08\mathbf q'+\mathbf K\mathbf q=\mathbf0,\qquad
+\mathbf K=\begin{bmatrix}2&-1\\-1&2\end{bmatrix}.
+$$
+
+令
+
+$$
+\mathbf x=\begin{bmatrix}\mathbf q\\\mathbf v\end{bmatrix}
+=\begin{bmatrix}q_1&q_2&v_1&v_2\end{bmatrix}^{\top}\in\mathbb R^4,\qquad
+\frac{\mathrm d\mathbf x}{\mathrm d\tau}
+=\underbrace{\begin{bmatrix}\mathbf0&\mathbf I_2\\-\mathbf K&-0.08\mathbf I_2\end{bmatrix}}_{\mathbf A_c\in\mathbb R^{4\times4}}\mathbf x.
+$$
+
+程序用 $\mathbf A_d=\exp(\Delta\tau\mathbf A_c)$、$\Delta\tau=0.04$、$\mathbf x_0=(0.9,-0.4,0,0.3)^\top$ 生成 251 个状态。生成器知道 $\mathbf A_c$；辨识过程只读取训练快照，不把真实 $\mathbf A_d$ 作为输入。真算子仅用于本教学例的事后检查。只测位移而没有速度时，当前二维位移通常不构成一阶闭合状态，不能直接套用本例的精确恢复结论。
+
+图像：assets/system-static.png。下一页把这些状态按相邻时间配对。
+
+# 第 2 页：把轨迹写成两个矩阵
+
+**起点：**$\mathbf x_0,\ldots,\mathbf x_M$，$M=150$。
+
+$$
+\mathbf X_-=[\mathbf x_0,\ldots,\mathbf x_{M-1}]\in\mathbb R^{4\times M},
+\qquad
+\mathbf X_+=[\mathbf x_1,\ldots,\mathbf x_M]\in\mathbb R^{4\times M}.
+$$
+
+两个矩阵的第 $m+1$ 列是一对 $(\mathbf x_m,\mathbf x_{m+1})$，时间差都是 $\Delta\tau$。这里样本数 $M$ 与状态维数 4 不同。待估计的矩阵 $\mathbf A\in\mathbb R^{4\times4}$ 左乘每列，模型为
+
+$$
+\mathbf X_+\approx\mathbf A\mathbf X_-.
+$$
+
+程序中 x = states[:, :150]，y = states[:, 1:151]。训练只到 $\mathbf x_{150}$；后续 $\mathbf x_{151},\ldots,\mathbf x_{250}$ 从未参与拟合。下一页确定“近似”所使用的目标函数。
+
+# 第 3 页：最小二乘与伪逆
+
+Frobenius 范数逐列相加，故
+
+$$
+J(\mathbf A)=\|\mathbf X_+-\mathbf A\mathbf X_-\|_F^2
+=\sum_{m=0}^{M-1}\|\mathbf x_{m+1}-\mathbf A\mathbf x_m\|_2^2.
+$$
+
+本例数据为实数。对 $\mathbf A$ 求导，得到
+
+$$
+\nabla_{\mathbf A}J=2(\mathbf A\mathbf X_--\mathbf X_+)\mathbf X_-^\top.
+$$
+
+令导数为零，正规方程为
+$\widehat{\mathbf A}\mathbf X_-\mathbf X_-^\top=\mathbf X_+\mathbf X_-^\top$。
+若 $\operatorname{rank}\mathbf X_-=4$，右乘可逆矩阵的逆得到
+$\widehat{\mathbf A}=\mathbf X_+\mathbf X_-^\top(\mathbf X_-\mathbf X_-^\top)^{-1}$。
+秩不足时这个逆不再成立，下面用伪逆统一表达最小范数选择。
+
+令 $\mathbf X_-=\mathbf U\mathbf\Sigma\mathbf V^*$ 为秩 $s$ 的紧 SVD。由于 $\mathbf U^*\mathbf U=\mathbf I_s$、$\mathbf V^*\mathbf V=\mathbf I_s$，其伪逆为 $\mathbf X_-^\dagger=\mathbf V\mathbf\Sigma^{-1}\mathbf U^*$。所有最小二乘解可写为
+
+$$
+\widehat{\mathbf A}=\mathbf X_+\mathbf X_-^\dagger
++\mathbf Z(\mathbf I_4-\mathbf X_-\mathbf X_-^\dagger).
+$$
+
+任意第二项都在训练数据张成空间上为零；取 $\mathbf Z=\mathbf0$ 得到最小 Frobenius 范数解。数据仅确定它所覆盖子空间上的作用，不能从残差很小推出整个状态空间上的唯一真实动力学。本例训练矩阵的实际秩为 4，且数据严格来自四维线性系统，因而 $\mathbf X_-\mathbf X_-^\dagger=\mathbf I_4$，有
+
+$$
+\widehat{\mathbf A}=\mathbf A_d\mathbf X_-\mathbf X_-^\dagger=\mathbf A_d
+$$
+
+到数值精度。下一页把大矩阵伪逆写成保留秩 $r$ 的计算。
+
+# 第 4 页：截断 SVD 的构造与含义
+
+从紧 SVD 中保留前 $r\le s$ 个奇异三元组：
+
+$$
+\mathbf U_r\in\mathbb C^{4\times r},\quad
+\mathbf\Sigma_r\in\mathbb R^{r\times r},\quad
+\mathbf V_r\in\mathbb C^{M\times r}.
+$$
+
+按如下顺序计算：
+
+$$
+\mathbf B_r=\mathbf X_+\mathbf V_r\mathbf\Sigma_r^{-1}\in\mathbb C^{4\times r},
+\qquad
+\mathbf A_r=\mathbf B_r\mathbf U_r^*\in\mathbb C^{4\times4}.
+$$
+
+先做 $\mathbf X_+\mathbf V_r$，再按列除以非零奇异值，避免显式求逆；程序中的 bridge 就是 $\mathbf B_r$。它是通往下一页小矩阵的桥梁。
+
+当 $r=s$ 时，$\mathbf A_r=\widehat{\mathbf A}$。当 $r<s$ 时，这是截断伪逆形成的回归，不应笼统称为所有秩 $r$ 矩阵中的最优动力学模型。其适用解释为限制 $\mathbf A=\mathbf A\mathbf U_r\mathbf U_r^*$ 后在所选输入子空间上回归。本例比较 $r=2$ 与 $r=4$，用于展示信息截断造成的影响，没有自动把“奇异值小”等同于“动力学不重要”。
+
+# 第 5 页：小矩阵特征问题与模态
+
+定义
+
+$$
+\widetilde{\mathbf A}_r=\mathbf U_r^*\mathbf B_r\in\mathbb C^{r\times r},\qquad
+\widetilde{\mathbf A}_r\mathbf w_j=\lambda_j\mathbf w_j.
+$$
+
+它是 $\mathbf A_r$ 在 $\mathbf U_r$ 上的投影。计算特征向量只需解 $r\times r$ 问题。对 $\lambda_j\ne0$，取非零提升
+
+$$
+\boldsymbol\phi_j=\mathbf B_r\mathbf w_j\in\mathbb C^4.
+$$
+
+下一页直接代入证明 $\mathbf A_r\boldsymbol\phi_j=\lambda_j\boldsymbol\phi_j$。这与“先得到一个小矩阵，再不解释地给出大空间模态”不同。@tu2014dmd 的预印本算法采用 $\lambda_j^{-1}\mathbf B_r\mathbf w_j$ 的归一化；本模板省略这个非零比例因子，并把尺度吸收入幅值，特征关系不变。
+
+投影模态 $\mathbf U_r\mathbf w_j$ 与这里的精确模态一般不同；如果对应子空间对算子不变，二者才可在适当缩放下比较。模板不把投影关系误写成一般情况下的相等。
+
+# 第 6 页：从特征关系到时间展开
+
+**本页采用整页滚动。**完整计算由五个阶段组成，slides 保留每一步，不将推导藏在一个小滚动框中。
+
+## 6.1 证明提升后的特征关系
+
+$$
+\begin{aligned}
+\mathbf A_r\boldsymbol\phi_j
+&=(\mathbf B_r\mathbf U_r^*)(\mathbf B_r\mathbf w_j)\\
+&=\mathbf B_r(\mathbf U_r^*\mathbf B_r)\mathbf w_j\\
+&=\mathbf B_r\widetilde{\mathbf A}_r\mathbf w_j\\
+&=\lambda_j\mathbf B_r\mathbf w_j
+=\lambda_j\boldsymbol\phi_j.
+\end{aligned}
+$$
+
+每一步仅使用前页已经定义的对象。非零特征值保证提升不会是零向量：若 $\mathbf B_r\mathbf w_j=\mathbf0$，则 $\widetilde{\mathbf A}_r\mathbf w_j=\mathbf0$，与 $\lambda_j\ne0,\mathbf w_j\ne0$ 矛盾。
+
+## 6.2 组装模态矩阵
+
+令 $\mathbf\Phi=[\boldsymbol\phi_1,\ldots,\boldsymbol\phi_r]$、$\mathbf\Lambda=\mathrm{diag}(\lambda_1,\ldots,\lambda_r)$，则
+
+$$
+\mathbf A_r\mathbf\Phi=\mathbf\Phi\mathbf\Lambda.
+$$
+
+使用完整对角化与模态展开需要足够的独立特征向量。本例 $r=4$，程序实际检查特征关系残差，且 $\mathbf\Phi$ 可逆。若出现 Jordan 块或不能表示的初态分量，应改用一般传播或补充相应项，不能无条件使用下面的纯模态公式。
+
+## 6.3 用预测起点确定幅值
+
+取 $m_0=150$。由当前完整状态解
+
+$$
+\mathbf\Phi\mathbf b=\mathbf x_{m_0},
+\qquad \mathbf b=\mathbf\Phi^{-1}\mathbf x_{m_0}.
+$$
+
+程序使用线性求解器，不显式计算逆。低秩且只能近似表示初态时，$\mathbf\Phi^\dagger\mathbf x_{m_0}$ 是初态拟合；它不自动等于任意初态下的全状态回归矩阵传播，二者的范围必须说明。
+
+## 6.4 逐次代入得到预测
+
+$$
+\begin{aligned}
+\widehat{\mathbf x}_{m_0+1}
+&=\mathbf A_4\mathbf\Phi\mathbf b
+=\mathbf\Phi\mathbf\Lambda\mathbf b,\\
+\widehat{\mathbf x}_{m_0+2}
+&=\mathbf A_4\mathbf\Phi\mathbf\Lambda\mathbf b
+=\mathbf\Phi\mathbf\Lambda^2\mathbf b,\\
+\widehat{\mathbf x}_{m_0+h}
+&=\mathbf\Phi\mathbf\Lambda^h\mathbf b
+=\sum_{j=1}^{4}\boldsymbol\phi_j\lambda_j^h b_j.
+\end{aligned}
+$$
+
+这里 $h=1,\ldots,100$。右侧只需要当前初态和已经拟合的对象，不读取后续真值。
+
+## 6.5 把离散谱解释为连续变化率
+
+在选定对数分支、均匀采样和适当频率范围内，定义
+
+$$
+\mu_j=\frac{\log\lambda_j}{\Delta\tau},\qquad
+\mathrm{Re}\,\mu_j\ \text{为增长/衰减率},\quad
+\mathrm{Im}\,\mu_j\ \text{为无量纲角频率}.
+$$
+
+复对数存在分支与采样混叠，不能仅凭一个离散特征值无条件恢复唯一连续频率。本模板数值对照使用离散谱，避免以取对数代替频率辨识条件分析。
+
+# 第 7 页：实现顺序与预测信息
+
+代码依次构造 SVD、bridge、小矩阵、特征向量和模式；对象名与公式一一对应。训练只使用 $\mathbf X_-,\mathbf X_+$，预测起点使用 $\mathbf x_{150}$：
+
+~~~python
+u, s, vh = np.linalg.svd(x, full_matrices=False)
+ur, vr = u[:, :r], vh.conj().T[:, :r]
+bridge = (y @ vr) / s[:r]
+reduced = ur.conj().T @ bridge
+lam, w = np.linalg.eig(reduced)
+phi = bridge @ w
+operator = bridge @ ur.conj().T
+~~~
+
+实际误差表对 $r=2,4$ 都使用 $\mathbf A_r^h\mathbf x_{150}$ 递推，确保比较相同的预测规则和初态。仅 $r=4$ 另外用模态公式核对与递推一致，避免低秩初态投影造成另一项未说明的差别。
+
+# 第 8 页：结论成立所需的条件
+
+@tu2014dmd 的线性一致性条件是 $\ker\mathbf X_-\subseteq\ker\mathbf X_+$：输入数据间的线性关系必须在后继数据中保持。它与“样本数足够多”不同。本例存在真实线性 $\mathbf A_d$，因此该条件自动成立。
+
+| 条件 | 本例怎样满足 | 不满足时应检查什么 |
+|---|---|---|
+| 状态闭合 | 同时使用位移和速度 | 部分观测是否需要延迟坐标或更丰富观测 |
+| 数据覆盖 | 训练快照矩阵数值秩为 4 | 初态是否激发所需方向；采样是否退化 |
+| 线性模型适配 | 数据由固定四维线性矩阵生成 | 非线性或时变系统是否只能局部近似 |
+| 噪声与求逆 | 当前演示无噪声 | 小奇异值放大噪声、截断或正则化的影响 |
+| 模态展开 | 完整秩，四个独立模式 | 不可对角化、零特征值、初态可表示性 |
+
+这些条件解释本例为什么可恢复；不把一次低误差升级为真实实验中的全局泛化或唯一物理参数恢复。
+
+# 第 9 页：数值检验与指标
+
+训练数据对覆盖 $m=0,\ldots,149$，预测使用 $\mathbf x_{150}$ 为初态，比较未来 100 个状态。指标均为四个无量纲状态的整体 Frobenius 比值：
+
+$$
+E_{\mathrm{fit}}=\frac{\|\mathbf X_+-\mathbf A_r\mathbf X_-\|_F}{\|\mathbf X_+\|_F},
+\quad
+E_{\mathrm{pred}}=
+\frac{\|[\mathbf x_{151},\ldots,\mathbf x_{250}]
+-[\widehat{\mathbf x}_{151},\ldots,\widehat{\mathbf x}_{250}]\|_F}
+{\|[\mathbf x_{151},\ldots,\mathbf x_{250}]\|_F}.
+$$
+
+它们不是四个分量相对误差的算术平均；转为百分数时统一乘 100。表格直接从同一份未舍入计算结果生成。
+
+{{< include data/metrics-table.qmd >}}
+
+完整秩误差接近机器精度，符合本例的完整状态、无噪声、线性生成与满行秩设定；秩 2 结果说明当前初态和时间窗下，丢弃两个方向会损失预测信息。不能据此判断真实实验中的最佳秩，也不能推断所有数据的秩 2 模型都有同样误差。
+
+# 第 10 页：GIF 与静态图使用同一证据
+
+GIF 由 trajectory.csv 对应的轨迹生成，按每三个采样点取一帧，共 84 帧。画面中的质量块位置只按同一无量纲位移作显示缩放；阻尼在方程中，动画省略阻尼器外形。每轮从相同初值重放，不表示系统达到周期稳态。
+
+排版采用宽左窄右：左侧 GIF 交代对象和实际运动，右侧相平面给出另一种定量观察。GIF 不充当误差曲线的证据替代；需要误差时回到数据、预测图和指标。静态交付可使用 system-static.png 交代结构，也可从 GIF 选取一个明确时间帧，不能把静态截图说成动画。
+
+# 第 11 页：两幅图并排比较
+
+左侧奇异值图回答“保留了哪些输入方向”；右侧离散谱图回答“完整秩识别到的增长与旋转是否正确”。共用清晰的标题与两条短图注，不在每图上方堆叠研究标签。单位圆只画与当前特征值接近的局部弧线，并明确标为局部，防止误以为完整单位圆具有错误形状。
+
+# 第 12 页：上方双图、下方横图
+
+上方 q1、q2 预测图使用相同的预测区间、颜色和图例；下方相平面覆盖同一条轨迹。两幅小图分别展示分量，横图展示联合关系。保留轴名、单位或无量纲说明，不能裁掉坐标来“放大图片”。
+
+这种示例的作用是说明布局如何服务比较。换成真实实验时，应同步更改图例、评价区间、变量与说明，而不是保持图片框不变后强行塞入不相关图片。
+
+# 第 13 页：后续检验与完成边界
+
+1. 加入明确幅值的观测噪声：比较奇异值和预测误差随噪声的变化，检验截断选择的敏感性。
+2. 只测位移：分析观测是否闭合，再决定是否引入延迟状态；先解决表示问题，再比较算法。
+3. 换初态：保持辨识模型不变，使用未参与拟合的初态检验适用范围，避免只看同一条轨迹。
+
+当前已完成：数据实际生成、模型拟合、秩对照、特征关系与两种传播实现的数值一致性检查、GIF 和静态图。以上三项属于后续计划，尚未运行。模板能说明制作流程和本合成算例的计算结果，不代表真实实验结论。
+
+# 对 AI 的复用要求
+
+先更新本说明，再更新相应 slides；每个新对象交代定义、维度、构造和后续用途。保留理解非平凡变换所需的中间式，删除只复述公式或宣告“下面将介绍”的句子。页内计算链由公式、短定义和图表体现，不需要把“输入、处理、输出”写成每页的装饰标签。
+
+使用模板样式时只继承表达方法、版式与可复现资源组织。每个科学判断和数字都重新对应用户实际材料；新的结果必须来自实际运行或已验证证据。

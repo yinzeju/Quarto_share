@@ -1,0 +1,25 @@
+---
+title: "[TODO: Research paper title]"
+---
+
+<!-- Set the requested language, verified author metadata, and abstract before delivery. -->
+
+# Introduction {#sec-introduction}
+
+[TODO: Define the question, literature-supported gap, and contribution supported by available evidence.]
+
+# Formulation and methods {#sec-methods}
+
+[TODO: State assumptions, define symbols and units, and describe a reproducible method.]
+
+# Results {#sec-results}
+
+[TODO: Present verified results with traceable figures and tables.]
+
+# Discussion {#sec-discussion}
+
+[TODO: Interpret findings, compare verified work, and state limitations.]
+
+# Conclusions {#sec-conclusions}
+
+[TODO: State only conclusions supported by the completed manuscript.]

@@ -1,0 +1,8 @@
+| Elements | $L^2$ error | $H^1$ seminorm error | $L^2$ order |
+|---:|---:|---:|---:|
+| 8 | 9.920920e-03 | 2.511818e-01 | - |
+| 16 | 2.486501e-03 | 1.258332e-01 | 1.996 |
+| 32 | 6.220178e-04 | 6.294691e-02 | 1.999 |
+| 64 | 1.555290e-04 | 3.147724e-02 | 2.000 |
+
+: Errors for the manufactured-solution test, computed by the local solver. {#tbl-convergence}

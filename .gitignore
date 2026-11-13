@@ -1,8 +1,24 @@
 # Local runtime state, report outputs, and archives.
 /.codex/
-/Report/
+/Paper/*
+!/Paper/README.md
+!/Paper/Template/
+/Report/*
+!/Report/README.md
+!/Report/Weekly/
+/Report/Weekly/*
+!/Report/Weekly/README.md
+!/Report/Weekly/Template/
 /Archive/
 /dist/
+/.venv/
+/output/
+/.playwright-cli/
+**/_output/
+**/.quarto/
+**/tmp/
+**/.playwright-cli/
+**/*_files/
 **/__pycache__/
 *.py[cod]
 .DS_Store

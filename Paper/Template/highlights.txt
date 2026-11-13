@@ -1,0 +1,6 @@
+Synthetic pipeline test; not a research submission.
+
+- A manufactured solution exercises a Quarto research-paper workflow.
+- A local finite element script generates all toy numerical evidence.
+- Equations, figures, tables, and citations are preserved in LaTeX output.
+- A flat source archive supports compilation outside the Quarto project.

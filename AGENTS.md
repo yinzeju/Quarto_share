@@ -1,6 +1,6 @@
-# Research Report Workspace Router
+# Publishing Workspace Router
 
-This workspace stores shared research-report rules and reusable skills. `Report/` contains individual report projects. The workspace root is not a renderable Quarto project. These shared rules do not change explicit authorization already granted in a user's session.
+This workspace stores shared paper/report rules, reusable skills and runnable templates. Paper/ and Report/ are publication collections; the workspace root is not a renderable Quarto project. These shared rules do not change explicit authorization already granted in a user's session.
 
 ## Route the work
 
@@ -8,8 +8,15 @@ This workspace stores shared research-report rules and reusable skills. `Report/
 |---|---|---|
 | Research report, explanation, Quarto slides, editable PPTX | A concrete project under `Report/` | [quarto-report](.agents/skills/quarto-report/SKILL.md); select the prose, Quarto, or PPTX branch |
 | New or revised weekly research presentation | A concrete project under `Report/Weekly/` | [weekly-report](.agents/skills/weekly-report/SKILL.md) plus quarto-report and its weekly conventions |
+| Formal manuscript, journal adaptation, LaTeX/PDF handoff | A concrete project under Paper/ | [quarto-paper](.agents/skills/quarto-paper/SKILL.md) |
 
-Keep these two skills together under `.agents/skills/`. Select by report purpose, then load only the references needed for the requested output. Use available PDF, presentations, and browser tooling as supporting tools. Do not assume that tools available in the original author's environment are installed here. Formal manuscript publishing is outside this package.
+Keep the three skills together under .agents/skills/. Select by publication purpose, then load only the references needed for the requested phase/output. Use available PDF, presentations, and browser tooling as supporting tools. Do not assume that tools available in the original author's environment are installed here.
+
+## Start from the examples
+
+- [Paper/Template](Paper/Template/README.md) is copied from the author's actual synthetic manuscript pipeline test. Reuse its project structure, not its fictional identity or synthetic scientific findings for real submissions.
+- [Report/Weekly/Template](Report/Weekly/Template/README.md) demonstrates a detailed brief and 13 connected slides. Inspect its brief and source to learn formula construction, full intermediate steps, restrained projected prose, whole-slide scrolling and GIF/static-image layouts.
+- Copy a template to a new named project when requested. Keep original templates and generated teaching examples intact. Update the detailed brief before slides, and replace evidence, figures, metrics, references and conclusions together.
 
 ## Locate the publication
 
@@ -38,10 +45,11 @@ Render requested outputs and inspect slide overviews and relevant full-size page
 
 ## Git boundaries and authorization
 
-Report generation does not require Git setup. Detect the actual repository layout before any authorized staging or synchronization; do not initialize repositories or configure remotes merely because this template describes them.
+Publication generation does not require Git setup. The included templates are tracked in this sharing repository; new user projects are local by default. Detect the actual repository layout before authorized staging or synchronization; do not initialize repositories or configure remotes merely because this template describes them.
 
 - Before staging/committing, check status, existing staging, `git rev-parse --show-toplevel`, and `git remote -v` in the intended directory. Stage only task-related changes and preserve unrelated user work.
 - Do not stage nested repositories as Git links in the workflow repository. Keep machine paths, secrets, caches, browser diagnostics, unrelated private notebook copies, and archives out of commits. The bundled Core file is an authorized part of this skill package.
 - Batch a coherent revision after appropriate validation and diff review. A weekly report and its content README belong in the same checkpoint. Small isolated wording/formatting changes may wait for a substantive checkpoint.
 - The original author's standing permission for automatic commit/push is not granted by distributing this template. Follow the recipient's actual session or repository authorization. If they authorize automatic checkpoints, commit/push meaningful completed revisions to their established current branch/remote without repeated confirmation.
 - Verify commit and push results. On an ordinary recoverable failure, inspect and resolve the cause within scope; otherwise preserve local work and report the actual unsynced state. Never force-push or rewrite published history without explicit authorization.
+- A source bundle or rendered manuscript does not authorize actual journal submission. Verify current official journal requirements for real adaptation tasks; a template's historical test notes do not establish current compliance.

@@ -1,6 +1,6 @@
-# Quarto 科研汇报流程与技能包
+# Quarto 科研出版流程、技能与模板
 
-这份分享包整理了科研汇报和周报的制作规则：先建立可追溯的证据与推导，再组织可编辑源稿，最后渲染、检查和交付。包含 `quarto-report` 与 `weekly-report` 两套技能，覆盖研究说明、文献汇报、实验汇报、Quarto 幻灯片和可编辑 PPTX。
+这份分享包整理了论文、科研汇报和周报的制作规则：先建立可追溯的证据与推导，再组织可编辑源稿，最后渲染、检查和交付。包含 `quarto-paper`、`quarto-report` 与 `weekly-report` 三套技能，以及可以直接渲染的论文和周报模板。
 
 仓库地址：[yinzeju-archive/Quarto_share](https://github.com/yinzeju-archive/Quarto_share)。
 
@@ -12,6 +12,7 @@
 | 代理自动遵循的工作区规则 | [AGENTS.md](AGENTS.md) |
 | 科研说明、汇报、Quarto 幻灯片、可编辑 PPTX | [quarto-report](.agents/skills/quarto-report/SKILL.md) |
 | 周报的内容规划与连续推导 | [weekly-report](.agents/skills/weekly-report/SKILL.md) |
+| 论文写作、期刊适配和 LaTeX/PDF 交付 | [quarto-paper](.agents/skills/quarto-paper/SKILL.md) |
 | 查看内置的 Core 符号约定 | [Notation Core](.agents/skills/quarto-report/references/notation-core.md) |
 
 ## 包含什么
@@ -24,13 +25,16 @@ Quarto_share/
 ├── .gitattributes                # 文本统一使用 LF
 ├── .agents/skills/
 │   ├── quarto-report/            # 汇报制作规则与输出分支
-│   └── weekly-report/            # 复用 quarto-report，需一起保留
+│   ├── weekly-report/            # 复用 quarto-report，需一起保留
+│   └── quarto-paper/             # 论文写作、期刊与源稿交付
+├── Paper/Template/               # 复制作者现有的完整论文测试例
+├── Report/Weekly/Template/       # 13 页周报、完整说明、GIF、图片、数据和脚本
 ├── docs/workflow.md              # 中文流程与质量要求
 ├── scripts/build_share.py        # 检查并生成分享 ZIP
 └── dist/                         # 生成目录，不纳入 Git
 ```
 
-技能保留英文规则，交付内容默认中文。作者原有的汇报偏好已直接写入技能：
+技能保留英文规则，科研汇报默认中文，论文语言跟随用户与目标期刊。作者原有的汇报偏好已直接写入技能：
 
 | 项目 | 内置规则 |
 |---|---|
@@ -43,6 +47,24 @@ Quarto_share/
 
 Core 原文已随 `quarto-report` 放在同一个技能目录内，使用时自动读取，不需要访问作者的笔记仓库或设置符号文件路径。
 
+## 先看两个完整模板
+
+| 分类目录 | 模板 | 具体内容 |
+|---|---|---|
+| [Paper](Paper/README.md) | [Paper/Template](Paper/Template/README.md) | 直接复制作者的 CMAME / Elsevier 管线测试：完整论文、真实背景文献、制造解数据、图表、期刊扩展与独立 LaTeX 编译脚本 |
+| [Report/Weekly](Report/Weekly/README.md) | [Report/Weekly/Template](Report/Weekly/Template/README.md) | 参考作者 20261029 周报的表达方式；精确 DMD 的 13 页连续推导、完整说明、实际生成的合成数据、GIF、双图与三图排版 |
+
+两个模板都附带已有的图表与数据，普通渲染不重新计算实验。论文模板保留虚构作者与合成测试标记；周报数字来自教学振子程序，不是作者真实实验。AI 应学习它们的组织与论证方式，用真实材料替换科学内容。
+
+从仓库根目录可以直接运行：
+
+```powershell
+quarto render Paper/Template/manuscript.qmd --to html --no-execute
+quarto render Report/Weekly/Template --no-execute
+```
+
+也可进入具体模板目录执行 `quarto preview`。进一步的期刊 PDF、数值重算和 LaTeX 验证命令写在各模板 README 中。
+
 ## 三步开始
 
 可以克隆仓库，也可以解压分享 ZIP：
@@ -52,22 +74,27 @@ git clone https://github.com/yinzeju-archive/Quarto_share.git
 cd Quarto_share
 ```
 
-1. 用 Codex 打开克隆或解压后的根目录。保留 `.agents/skills/` 与 `AGENTS.md`；两套技能保持相邻。
+1. 用 Codex 打开克隆或解压后的根目录。保留 `.agents/skills/` 与 `AGENTS.md`；三套技能保持相邻。
 2. 提供真实的笔记、论文 PDF/Markdown、实验报告或图表，可以放到工作区任意目录，也可以在任务中直接给出实际文件位置。
-3. 复制下方与需求对应的完整任务，把主题、路径、日期和时长替换为自己的信息，即可开始。代理按内置规则建立或修订 `Report/` 中的项目。
+3. 让 AI 先读取相应模板，或复制下方完整任务，把主题、路径、日期和时长替换为自己的信息。代理按内置规则在 `Paper/` 或 `Report/` 中建立或修订项目。
 
 本包采用 `.agents/skills/` 作为项目技能目录，这是当前 Codex 的本地技能发现位置；技能既可显式调用，也可按描述自动匹配。如果新技能未出现，可重启 Codex。[官方技能说明](https://learn.chatgpt.com/docs/build-skills)（核对日期：2026-11-12）。
 
-例如，开始制作后工作区可以是下面这样；这些项目和材料目录由实际任务决定，不需要提前建立：
+分类目录组织与作者工作区一致；每个具体模板或项目都有自己的渲染入口：
 
 ```text
 workspace/
 ├── AGENTS.md
 ├── .agents/skills/
 ├── materials/                    # 用户提供的材料，也可使用其他位置
+├── Paper/
+│   ├── Template/
+│   └── Topic/                    # 按需复制模板后创建
 └── Report/
     ├── Topic/
-    └── Weekly/YYYYMMDD/
+    └── Weekly/
+        ├── Template/
+        └── YYYYMMDD/             # 按需创建的新周报
 ```
 
 有现成项目时保留原结构。默认从分享包根目录分派任务，代理在具体汇报目录内预览和渲染。Git 提交和推送按用户在实际会话中的授权处理。
@@ -212,6 +239,17 @@ sources/literature/dmd/ 的论文材料，在 Report/DMD-method/ 中
 来源与符号映射。请标出证据缺口，本次不制作 slides 或 PPTX。
 ```
 
+### 5. 从论文模板开始真实写作
+
+```text
+使用 $quarto-paper，先读取 Paper/Template 的论文、研究简报和输出配置，
+将模板复制到 Paper/MyStudy/，保留原模板。
+依据我提供的真实研究材料建立研究问题、主张与证据对应关系，再编写正文。
+模板中的虚构作者、机构、声明和制造解数据不能沿用为真实投稿信息；
+缺失信息用明确 TODO 标出。保留可编辑公式、真实文献与相对资源路径。
+先渲染 HTML 检查内容，再按我明确选择的目标期刊核对官方要求与 PDF。
+```
+
 ## 重新打包与维护
 
 从本目录执行：
@@ -221,6 +259,6 @@ python scripts/build_share.py --check
 python scripts/build_share.py
 ```
 
-第二条命令生成 `dist/quarto-share.zip`。脚本按明确的目录清单打包两套汇报技能、Core 原文与使用说明，包含隐藏技能目录，并检查本地 Markdown 链接、技能入口、语法和可疑的机器路径。ZIP 内带相对路径及 SHA-256 清单，便于核对内容；不会收集 `Report/`、用户材料、缓存或外层工作区。
+第二条命令生成 `dist/quarto-share.zip`。脚本按明确清单打包三套技能、Core 原文、说明以及两个模板的源稿、必要数据、GIF/图片、期刊资源与复现脚本。ZIP 内带 SHA-256 清单；新建的私人项目、缓存、渲染中间文件与外层工作区不会被收集。
 
-分享文件夹或 ZIP 均可。ZIP 是本地生成物，需要重建时先更新分享版再运行脚本。此目录是一份独立的分享快照，不会自动同步外层工作区的技能修改。除授权复制的 Core 符号约定外，不附带个人笔记、研究结果、论文 PDF 或账户凭据。
+分享文件夹或 ZIP 均可。ZIP 是本地生成物，更新后运行脚本重建。分享仓库独立维护，不自动同步作者工作区；除授权复制的 Core、论文测试例与模板所列教学资源外，不附带私人笔记、未列明研究数据或账户凭据。

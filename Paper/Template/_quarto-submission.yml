@@ -1,0 +1,12 @@
+format:
+  elsevier-pdf:
+    pdf-engine: pdflatex
+    keep-tex: true
+    latex-clean: false
+    latex-auto-install: false
+    latex-tinytex: false
+    colorlinks: false
+    journal:
+      name: Computer Methods in Applied Mechanics and Engineering
+      formatting: preprint
+      cite-style: number
