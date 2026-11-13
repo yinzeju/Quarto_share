@@ -2,7 +2,7 @@
 
 这份分享包整理了论文、科研汇报和周报的制作规则：先建立可追溯的证据与推导，再组织可编辑源稿，最后渲染、检查和交付。包含 `quarto-paper`、`quarto-report` 与 `weekly-report` 三套技能，以及可以直接渲染的论文和周报模板。
 
-仓库地址：[yinzeju-archive/Quarto_share](https://github.com/yinzeju-archive/Quarto_share)。
+仓库地址：[yinzeju/Quarto_share](https://github.com/yinzeju/Quarto_share)。
 
 ## 从哪里开始
 
@@ -70,7 +70,7 @@ quarto render Report/Weekly/Template --no-execute
 可以克隆仓库，也可以解压分享 ZIP：
 
 ```powershell
-git clone https://github.com/yinzeju-archive/Quarto_share.git
+git clone https://github.com/yinzeju/Quarto_share.git
 cd Quarto_share
 ```
 
