@@ -1,15 +1,10 @@
-# 中文术语与表达规范
+# Chinese Scientific Terminology
 
-## 翻译原则
+Use accepted academic Chinese, preserving searchable proper names, model/dataset/device names, mathematical symbols, code, and necessary standard identifiers. Introduce useful abbreviations with the Chinese term at first use. Keep one term per concept and avoid decorative English or an excessive stack of unexplained acronyms. The user's confirmed domain terminology takes priority.
 
-- 优先使用学术界通行的中文译名，不进行生硬逐字翻译。
-- 首次出现且英文缩写有助于识别时，写成“中文名称（缩写）”；后续只使用中文或统一缩写。
-- 人名、算法名和模型名可以保留原文，例如 Koopman、Dreamer、TD-MPC2。
-- 标题和图表标签不使用仅为装饰的英文大写词。
-- LaTeX 命令、数学变量、单位、代码标识符不翻译。
-- 同一份汇报中同一概念只使用一种中文写法。
+## Context-sensitive glossary
 
-## 常用术语
+The following are starting translations, not universal substitutions; choose the meaning appropriate to the research and remain consistent.
 
 | 英文或缩写 | 推荐中文表达 |
 |---|---|
@@ -59,16 +54,4 @@
 | surrogate model | 代理模型 |
 | digital twin | 数字孪生 |
 
-## 专有词保留
-
-- Koopman 算子通常保留人名，可写为“Koopman 算子”。
-- 模型名、数据集名、装置名和软件名保持官方拼写，不强行翻译。
-- LQR、MPC、RKHS 等标准缩写可以保留，但首次出现应给出中文全称。
-- 若某英文词在特定研究社群中没有稳定中文译名，可保留原词，并在首次出现时给出简短中文解释。
-
-## 禁止用法
-
-- 不用 `RESEARCH REPORT`、`CHALLENGE`、`FRAMEWORK` 等英文充当页眉或装饰。
-- 不把同一术语在“潜变量”“隐变量”“潜状态”之间随意切换。
-- 不为显得科技化而堆叠英文缩写。
-- 不翻译人名、模型名后导致读者无法检索原始工作。
+For example, retain the name in Koopman operator and explain RKHS/MPC/LQR on first use. Avoid switching between different Chinese words for the same latent-state concept without a scientific distinction. Preserve official names so readers can retrieve the source work.

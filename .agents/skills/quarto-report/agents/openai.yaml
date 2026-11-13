@@ -1,0 +1,4 @@
+interface:
+  display_name: "科研汇报"
+  short_description: "Plan research reports, then build and validate slides"
+  default_prompt: "Use $quarto-report to explain my research materials in a detailed mathematical report brief, then produce and validate the requested report or slides."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "周汇报"
+  short_description: "Build connected research talks with clear derivations"
+  default_prompt: "Use $weekly-report to organize my research materials into a weekly presentation with connected derivations, concise method overviews, experiments, and next steps."
