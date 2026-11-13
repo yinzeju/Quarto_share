@@ -10,7 +10,6 @@
 !/Report/Weekly/README.md
 !/Report/Weekly/Template/
 /Archive/
-/dist/
 /.venv/
 /output/
 /.playwright-cli/

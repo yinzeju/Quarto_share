@@ -58,6 +58,6 @@ python scripts/generate-demo.py
 - [results.json](data/results.json)：指标、参数和数值一致性检查。
 - [source-manifest.json](sources/source-manifest.json)：方法来源、版式来源与图片哈希。
 - [references.bib](references.bib)：已核对的真实文献记录。
-- [layout-validation.json](sources/layout-validation.json)：13 个逻辑页、43 处公式、GIF 播放与布局检查的实际记录；截图和浏览器临时文件不进入分享包。
+- [layout-validation.json](sources/layout-validation.json)：13 个逻辑页、43 处公式、GIF 播放与布局检查的实际记录；截图和浏览器临时文件保留在本地，不纳入版本控制。
 
 方法文献：[Tu et al. (2014), Journal of Computational Dynamics](https://doi.org/10.3934/jcd.2014.1.391)。本例只验证已注明条件下的教学计算，不代表新方法、真实实验泛化或真实物理参数辨识。

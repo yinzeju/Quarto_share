@@ -1,6 +1,6 @@
 # Quarto 科研出版流程、技能与模板
 
-这份分享包整理了论文、科研汇报和周报的制作规则：先建立可追溯的证据与推导，再组织可编辑源稿，最后渲染、检查和交付。包含 `quarto-paper`、`quarto-report` 与 `weekly-report` 三套技能，以及可以直接渲染的论文和周报模板。
+本仓库整理了论文、科研汇报和周报的制作规则：先建立可追溯的证据与推导，再组织可编辑源稿，最后渲染、检查和交付。包含 `quarto-paper`、`quarto-report` 与 `weekly-report` 三套技能，以及可以直接渲染的论文和周报模板。
 
 仓库地址：[yinzeju/Quarto_share](https://github.com/yinzeju/Quarto_share)。
 
@@ -29,9 +29,7 @@ Quarto_share/
 │   └── quarto-paper/             # 论文写作、期刊与源稿交付
 ├── Paper/Template/               # 复制作者现有的完整论文测试例
 ├── Report/Weekly/Template/       # 13 页周报、完整说明、GIF、图片、数据和脚本
-├── docs/workflow.md              # 中文流程与质量要求
-├── scripts/build_share.py        # 检查并生成分享 ZIP
-└── dist/                         # 生成目录，不纳入 Git
+└── docs/workflow.md              # 中文流程与质量要求
 ```
 
 技能保留英文规则，科研汇报默认中文，论文语言跟随用户与目标期刊。作者原有的汇报偏好已直接写入技能：
@@ -67,14 +65,14 @@ quarto render Report/Weekly/Template --no-execute
 
 ## 三步开始
 
-可以克隆仓库，也可以解压分享 ZIP：
+克隆仓库：
 
 ```powershell
 git clone https://github.com/yinzeju/Quarto_share.git
 cd Quarto_share
 ```
 
-1. 用 Codex 打开克隆或解压后的根目录。保留 `.agents/skills/` 与 `AGENTS.md`；三套技能保持相邻。
+1. 用 Codex 打开仓库根目录。保留 `.agents/skills/` 与 `AGENTS.md`；三套技能保持相邻。
 2. 提供真实的笔记、论文 PDF/Markdown、实验报告或图表，可以放到工作区任意目录，也可以在任务中直接给出实际文件位置。
 3. 让 AI 先读取相应模板，或复制下方完整任务，把主题、路径、日期和时长替换为自己的信息。代理按内置规则在 `Paper/` 或 `Report/` 中建立或修订项目。
 
@@ -97,13 +95,13 @@ workspace/
         └── YYYYMMDD/             # 按需创建的新周报
 ```
 
-有现成项目时保留原结构。默认从分享包根目录分派任务，代理在具体汇报目录内预览和渲染。Git 提交和推送按用户在实际会话中的授权处理。
+有现成项目时保留原结构。默认从仓库根目录分派任务，代理在具体汇报目录内预览和渲染。Git 提交和推送按用户在实际会话中的授权处理。
 
-实际构建需要安装 [Quarto](https://quarto.org/docs/get-started/)。HTML 使用 Quarto；LaTeX PDF 还需适配项目的 TeX 环境；执行代码时再配置对应的 Python、R 或 Julia 环境。附带的打包脚本使用 Python 3.9+ 标准库。PPTX 制作、浏览器和 PDF 页面检查工具由接收者自己的环境提供，本包不安装这些工具。
+实际构建需要安装 [Quarto](https://quarto.org/docs/get-started/)。HTML 使用 Quarto；LaTeX PDF 还需适配项目的 TeX 环境；执行代码时再配置对应的 Python、R 或 Julia 环境。PPTX 制作、浏览器和 PDF 页面检查工具由接收者自己的环境提供。
 
 ## 使用示例：从材料到成果
 
-以下主题、文件名、日期和页数用于演示怎样提出任务；包内没有附带这些材料，也不表示已有相应实验结果。使用前把路径和需求替换为自己的真实信息。示例中的所有路径都相对于工作区根目录。
+以下主题、文件名、日期和页数用于演示怎样提出任务，示例路径中的材料需由使用者提供。使用前把路径和需求替换为自己的真实信息。示例中的所有路径都相对于工作区根目录。
 
 ### 1. 准备材料并制作一次方法汇报
 
@@ -249,16 +247,3 @@ sources/literature/dmd/ 的论文材料，在 Report/DMD-method/ 中
 缺失信息用明确 TODO 标出。保留可编辑公式、真实文献与相对资源路径。
 先渲染 HTML 检查内容，再按我明确选择的目标期刊核对官方要求与 PDF。
 ```
-
-## 重新打包与维护
-
-从本目录执行：
-
-```powershell
-python scripts/build_share.py --check
-python scripts/build_share.py
-```
-
-第二条命令生成 `dist/quarto-share.zip`。脚本按明确清单打包三套技能、Core 原文、说明以及两个模板的源稿、必要数据、GIF/图片、期刊资源与复现脚本。ZIP 内带 SHA-256 清单；新建的私人项目、缓存、渲染中间文件与外层工作区不会被收集。
-
-分享文件夹或 ZIP 均可。ZIP 是本地生成物，更新后运行脚本重建。分享仓库独立维护，不自动同步作者工作区；除授权复制的 Core、论文测试例与模板所列教学资源外，不附带私人笔记、未列明研究数据或账户凭据。
